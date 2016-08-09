@@ -165,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void startLoading() {
         webView.loadUrl(Constant.MAIN_URL);
-        //  displayView(Displayer.LOADER_VIEW);
+          displayView(Displayer.LOADER_VIEW);
     }
 
     private void displayView(Displayer displayer) {
@@ -231,6 +231,10 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
         switch (id) {
             case R.id.load:
+                if(webView.getUrl()==null){
+                    webView.loadUrl(Constant.MAIN_URL);
+                    return true;
+                }
                 if (webView.getUrl().equals("about:blank")||webView.getUrl().equals(FILE_DIR)) {
                     webView.loadUrl(Constant.MAIN_URL);
                 } else {
