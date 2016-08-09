@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private WebView webView;
     private LinearLayout ll_loading;
     private ImageView iv_no_internet;
+    private static final String FILE_DIR="file:///android_asset/nointernet.html";
 
     public enum Displayer {LOADER_VIEW, NO_INTERNET_VIEW, WEB_VIEW}
 
@@ -63,6 +64,9 @@ public class MainActivity extends AppCompatActivity {
 
 
         });
+        webView.getSettings().setLoadsImagesAutomatically(true);
+        webView.getSettings().setJavaScriptEnabled(true);
+        webView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
         if (ConnectionDetector.isNetworkAvailable(getApplicationContext())) {
             startLoading();
 
@@ -104,7 +108,8 @@ public class MainActivity extends AppCompatActivity {
         public void onReceivedHttpError(WebView view, WebResourceRequest request, WebResourceResponse errorResponse) {
             WebResourceRequest request1 = request;
             WebResourceResponse error1 = errorResponse;
-            view.loadUrl("file:///android_asset/nointernet.html");
+          //  view.loadUrl("file:///android_asset/nointernet.html");
+
 
 
         }
@@ -113,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
         public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
             WebResourceRequest request1 = request;
             WebResourceError error1 = error;
-            view.loadUrl("file:///android_asset/nointernet.html");
+          //  view.loadUrl("file:///android_asset/nointernet.html");
 
 
         }
@@ -122,8 +127,9 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
             String htmlContentInStringFormat = StreamToString(getFileFromAsset("nointernet.html"));
-            //    view.loadUrl("file:///android_asset/nointernet.html");
-            view.loadDataWithBaseURL(null, htmlContentInStringFormat, "text/html", "utf-8", null);
+                view.loadUrl(FILE_DIR);
+           // view.loadDataWithBaseURL(null, htmlContentInStringFormat, "text/html", "utf-8", null);
+          //  view.loadData(Utility.getHtml("Error While Loading.<br/>Error code:"+errorCode), "text/html", "UTF-8");
         }
     }
 
@@ -158,9 +164,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startLoading() {
-        webView.getSettings().setLoadsImagesAutomatically(true);
-        webView.getSettings().setJavaScriptEnabled(true);
-        webView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
         webView.loadUrl(Constant.MAIN_URL);
         //  displayView(Displayer.LOADER_VIEW);
     }
@@ -228,7 +231,7 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
         switch (id) {
             case R.id.load:
-                if (webView.getUrl().equals("about:blank")) {
+                if (webView.getUrl().equals("about:blank")||webView.getUrl().equals(FILE_DIR)) {
                     webView.loadUrl(Constant.MAIN_URL);
                 } else {
                     webView.reload();
